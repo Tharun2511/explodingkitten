@@ -14,7 +14,7 @@ import { setGame } from "../store/game/gameSlice";
 import LeaderBoard from "./LeaderBoard";
 
 const Home = () => {
-    const SERVER_API = process.env.SERVER_API;
+    const SERVER_API = process.env.REACT_APP_SERVER_API;
     const navigate = useNavigate();
     const dispatch = useDispatch();
     let loggedUser = useSelector((state) => state.userState.user);
