@@ -16,6 +16,7 @@ const CardDeck = () => {
     const [message, setMessage] = useState("Good Luck! Let's Play!");
     const [cardPicked, setCardPicked] = useState("Please pick a card.");
     const [defuseCardCount, setDefuseCardCount] = useState(0);
+    let gameStatus = "inProgress";
 
     const handleClickCard = async (cardNumber) => {
         let currentCards = [...cards];
@@ -59,15 +60,19 @@ const CardDeck = () => {
                 setMessage(
                     "Oops! It's a Bomber kitten and exploded everything. You lost the game! You will be redirected shortly..."
                 );
+                gameStatus = "loss";
+                currentCards = [];
                 try {
                     await axios.put(`${SERVER_API}/api/game/lose`, {
                         userId: game.user,
                     });
-                    dispatch(updateUser({
-                        ...loggedUser,
-                        prevGameCompleted: true,
-                        numberOfGames: game.numberOfGames + 1,
-                    }));
+                    dispatch(
+                        updateUser({
+                            ...loggedUser,
+                            prevGameCompleted: true,
+                            numberOfGames: game.numberOfGames + 1,
+                        })
+                    );
                 } catch (error) {
                     toast.error("Failed to update status of game to loss");
                 }
@@ -77,12 +82,12 @@ const CardDeck = () => {
             }
         }
 
-        if (currentCards.length === 0) {
+        if (gameStatus === "inProgress" && currentCards.length === 0) {
             setMessage(
                 "Hurrah! You won, congrats! You will be redirected shortly..."
             );
+            gameStatus = "win";
             try {
-                console.log(game.user);
                 await axios.put(`${SERVER_API}/api/game/win`, {
                     userId: game.user,
                 });
@@ -106,7 +111,7 @@ const CardDeck = () => {
         dispatch(updateCards(currentCards));
     };
 
-    useEffect(() => {}, [cards]);
+    useEffect(() => {}, []);
 
     return (
         <div className="w-full h-full flex flex-col items-center ">
@@ -125,22 +130,32 @@ const CardDeck = () => {
                     </div>
                 </div>
             </div>
-            <div className="card-list">
-                {cards.map((card) => {
-                    return (
-                        <div
-                            key={card.cardNumber}
-                            className="card text-[100px] halloween-font cursor-pointer"
-                        >
+            <div className="card-list bg-white relative">
+                {cards.length > 0 ? (
+                    cards.map((card) => {
+                        return (
                             <div
-                                className="h-full px-5 border-4 border-red-500 rounded-3xl"
-                                onClick={() => handleClickCard(card.cardNumber)}
+                                key={card.cardNumber}
+                                className="card text-[100px] halloween-font cursor-pointer"
                             >
-                                {card.cardNumber}
+                                <div
+                                    className="h-full px-5 border-4 border-red-500 rounded-3xl"
+                                    onClick={() =>
+                                        handleClickCard(card.cardNumber)
+                                    }
+                                >
+                                    {card.cardNumber}
+                                </div>
                             </div>
+                        );
+                    })
+                ) : (
+                    <div className="w-full h-full flex items-start justify-start text-gray-900 text-[200px] halloween-font bg-black">
+                        <div className="min-w-[500px] absolute bottom-[170px] left-[-200px]">
+                            {gameStatus === "win" ? "You won!" : "You lost!"}
                         </div>
-                    );
-                })}
+                    </div>
+                )}
             </div>
         </div>
     );
