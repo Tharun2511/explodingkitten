@@ -54,6 +54,13 @@ input[type="date"]::-webkit-calendar-picker-indicator {
         text-shadow: 1px 1px 20px #fc2323, 1px -1px 20px #fc3838, 1px 1px 20px #ff8585;
 }
 
+.halloween-green-font{
+        font-family: "Jolly Lodger", system-ui;
+        font-weight: 400;
+        font-style: normal;
+        text-shadow: 1px 1px 20px #43fd22, 1px -1px 20px #5cfc4d, 1px 1px 20px #98ff92;
+}
+
 .input_field{
     @apply h-auto bg-transparent px-5 py-2 text-gray-100 placeholder:text-gray-300 border-[1px] outline-none rounded-lg 
 }
