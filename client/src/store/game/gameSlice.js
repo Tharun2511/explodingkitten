@@ -15,8 +15,6 @@ const gameSlice = createSlice({
     reducers: {
         setGame: (state, action) => {
             state.game = action.payload;
-            console.log(state.game);
-            console.log(action.payload);
         },
         updateCards: (state, action) => {
             state.game.cards = [...action.payload];
