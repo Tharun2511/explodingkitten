@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 
 const CardDeck = () => {
+    const SERVER_API = process.env.SERVER_API;
     const navigate = useNavigate();
     const game = useSelector((state) => state.gameState.game);
     const cards = useSelector((state) => state.gameState.game.cards);
@@ -32,7 +33,7 @@ const CardDeck = () => {
                 "Cheers! You got a defuser card. Please pick another card."
             );
         } else if (currentCards[index].name === "Shuffle") {
-            const { data } = await axios.post("/api/game/shuffle", {
+            const { data } = await axios.post(`/${SERVER_API}/api/game/shuffle`, {
                 gameId: game._id,
             });
             setMessage(
@@ -53,7 +54,7 @@ const CardDeck = () => {
                 );
                 try {
                     console.log(game.user);
-                    await axios.put("/api/game/lose", {
+                    await axios.put(`/${SERVER_API}/api/game/lose`, {
                         userId: game.user,
                     });
                     dispatch(updateUser("loss"));
@@ -72,7 +73,7 @@ const CardDeck = () => {
             );
             try {
                 console.log(game.user);
-                await axios.put("/api/game/win", {
+                await axios.put(`/${SERVER_API}/api/game/win`, {
                     userId: game.user,
                 });
                 dispatch(updateUser("win"));
@@ -84,7 +85,7 @@ const CardDeck = () => {
             }, 5000);
         }
         try {
-            await axios.put("/api/game/updatecards", {
+            await axios.put(`/${SERVER_API}/api/game/updatecards`, {
                 gameId: game._id,
                 cards: currentCards,
             });
