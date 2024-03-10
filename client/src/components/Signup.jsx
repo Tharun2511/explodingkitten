@@ -71,7 +71,7 @@ const Signup = () => {
         try {
             setLoading(true);
             const { data } = await axios.post(
-                `/${SERVER_API}/api/user/signup`,
+                `${SERVER_API}/api/user/signup`,
                 userDetails
             );
             console.log(data);
