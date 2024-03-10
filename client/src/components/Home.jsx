@@ -31,12 +31,12 @@ const Home = () => {
         try {
             if (!loggedUser.prevGameCompleted) {
                 console.log("Previous Game executing");
-                await axios.put(`/${SERVER_API}/api/game/endprevgame`, {
+                await axios.put(`${SERVER_API}/api/game/endprevgame`, {
                     gameId: loggedUser.prevGame,
                 });
             }
             console.log("Previous Game Ended");
-            const { data } = await axios.post(`/${SERVER_API}/api/game/new`, {
+            const { data } = await axios.post(`${SERVER_API}/api/game/new`, {
                 userId: loggedUser._id,
             });
 
@@ -61,7 +61,7 @@ const Home = () => {
     const handleResumeGame = async () => {
         if (!loggedUser.prevGameCompleted) {
             try {
-                const { data } = await axios.post(`/${SERVER_API}/api/game/resume`, {
+                const { data } = await axios.post(`${SERVER_API}/api/game/resume`, {
                     gameId: loggedUser.prevGame,
                 });
                 prevGame = {
