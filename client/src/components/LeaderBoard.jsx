@@ -7,14 +7,13 @@ const LeaderBoard = () => {
 
     const fetchLeaderBoard = async () => {
         try {
-            
             const { data } = await axios.get(`${SERVER_API}/api/leaderboard`);
-            setLeaderBoard(data);
+            setLeaderBoard([...data]);
         } catch (error) {
             console.log(error);
         }
     };
-    
+
     useEffect(() => {
         fetchLeaderBoard();
     }, []);
