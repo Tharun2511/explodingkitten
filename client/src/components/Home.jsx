@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { IoMdLogOut } from "react-icons/io";
 import { GiFairyWand } from "react-icons/gi";
 import { GiAncientSword } from "react-icons/gi";
@@ -12,6 +12,7 @@ import axios from "axios";
 import { toast } from "react-hot-toast";
 import { setGame } from "../store/game/gameSlice";
 import LeaderBoard from "./LeaderBoard";
+import { ClipLoader } from "react-spinners";
 
 const Home = () => {
     const SERVER_API = process.env.REACT_APP_SERVER_API;
@@ -19,6 +20,8 @@ const Home = () => {
     const dispatch = useDispatch();
     let loggedUser = useSelector((state) => state.userState.user);
     let prevGame = useSelector((state) => state.gameState.game);
+    const [newGameLoading, setNewGameLoading] = useState(false);
+    const [resumeGameLoading, setResumeGameLoading] = useState(false);
 
     const handleLogout = () => {
         dispatch(userLogout());
@@ -27,15 +30,13 @@ const Home = () => {
     };
 
     const handleNewGame = async () => {
-        console.log(loggedUser);
+        setNewGameLoading(true);
         try {
             if (!loggedUser.prevGameCompleted) {
-                console.log("Previous Game executing");
-                await axios.put(`${SERVER_API}/api/game/endprevgame`, {
-                    gameId: loggedUser.prevGame,
+                await axios.put(`${SERVER_API}/api/game/lose`, {
+                    userId: loggedUser._id,
                 });
             }
-            console.log("Previous Game Ended");
             const { data } = await axios.post(`${SERVER_API}/api/game/new`, {
                 userId: loggedUser._id,
             });
@@ -44,6 +45,7 @@ const Home = () => {
                 ...data,
             };
             dispatch(setGame(prevGame));
+
             loggedUser = {
                 ...loggedUser,
                 prevGame: prevGame._id,
@@ -53,17 +55,22 @@ const Home = () => {
             localStorage.setItem("user", JSON.stringify(loggedUser));
             navigate("/playground");
         } catch (error) {
-            console.log(error);
-            toast.error(error.response.data.messgae);
+            toast.error(error.message);
+        } finally {
+            setNewGameLoading(false);
         }
     };
 
     const handleResumeGame = async () => {
         if (!loggedUser.prevGameCompleted) {
+            setResumeGameLoading(true);
             try {
-                const { data } = await axios.post(`${SERVER_API}/api/game/resume`, {
-                    gameId: loggedUser.prevGame,
-                });
+                const { data } = await axios.post(
+                    `${SERVER_API}/api/game/resume`,
+                    {
+                        gameId: loggedUser.prevGame,
+                    }
+                );
                 prevGame = {
                     ...data,
                 };
@@ -72,6 +79,8 @@ const Home = () => {
             } catch (error) {
                 console.log(error);
                 toast.error("No Previous Game Found");
+            } finally {
+                setResumeGameLoading(false);
             }
         } else {
             toast.error("No Previous Game Found");
@@ -116,13 +125,31 @@ const Home = () => {
                         className="btn1 w-auto h-14 flex items-center justify-center"
                         onClick={handleNewGame}
                     >
-                        New Game <GiFairyWand className="text-2xl ml-4" />
+                        New Game{" "}
+                        {newGameLoading ? (
+                            <ClipLoader
+                                size={25}
+                                color="red"
+                                className="text-2xl ml-4"
+                            />
+                        ) : (
+                            <GiFairyWand className="ml-4" />
+                        )}
                     </div>
                     <div
                         className="btn2 w-auto h-14 flex items-center justify-center"
                         onClick={handleResumeGame}
                     >
-                        Resume Game <GiAncientSword className="text-3xl ml-4" />
+                        Resume Game{" "}
+                        {resumeGameLoading ? (
+                            <ClipLoader
+                                size={25}
+                                color="red"
+                                className="ml-4"
+                            />
+                        ) : (
+                            <GiAncientSword className="text-3xl ml-4" />
+                        )}
                     </div>
                 </div>
                 <LeaderBoard />
