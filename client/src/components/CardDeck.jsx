@@ -83,7 +83,7 @@ const CardDeck = () => {
                 }
                 setTimeout(() => {
                     navigate("/");
-                }, 5000);
+                }, 3000);
                 return;
             }
         }
@@ -101,7 +101,7 @@ const CardDeck = () => {
             }
             setTimeout(() => {
                 navigate("/");
-            }, 5000);
+            }, 3000);
             return;
         }
         try {
