@@ -130,7 +130,7 @@ const CardDeck = () => {
                     </div>
                 </div>
             </div>
-            <div className="card-list bg-white relative">
+            <div className="card-list relative">
                 {cards.length > 0 ? (
                     cards.map((card) => {
                         return (
