@@ -1,3 +1,5 @@
+The game is live at: https://explodingkittengame.vercel.app
+
 "Exploding Kittens" is a thrilling online single-player card game that puts players on the edge of their seats with its mix of strategy, luck, and anticipation. With a deck consisting of four different types of cards, players must navigate through the deck, avoiding exploding kittens while strategically using defuse cards and shuffle cards to their advantage.
 
 At the heart of the game are the four types of cards:
