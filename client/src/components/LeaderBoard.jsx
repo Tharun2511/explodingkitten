@@ -2,12 +2,13 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 
 const LeaderBoard = () => {
+    const SERVER_API = process.env.SERVER_API;
     const [leaderBoard, setLeaderBoard] = useState([]);
 
     const fetchLeaderBoard = async () => {
         try {
             
-            const { data } = await axios.get("/api/leaderboard");
+            const { data } = await axios.get(`/${SERVER_API}/api/leaderboard`);
             setLeaderBoard(data);
         } catch (error) {
             console.log(error);
