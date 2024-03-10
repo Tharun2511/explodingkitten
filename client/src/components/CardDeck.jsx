@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 
 const CardDeck = () => {
-    const SERVER_API = process.env.SERVER_API;
+    const SERVER_API = process.env.REACT_APP_SERVER_API;
     const navigate = useNavigate();
     const game = useSelector((state) => state.gameState.game);
     const cards = useSelector((state) => state.gameState.game.cards);
