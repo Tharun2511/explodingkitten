@@ -62,7 +62,7 @@ const CardDeck = () => {
                 dispatch(updateCards(currentCards));
             } else {
                 setMessage(
-                    "Oops! It's a Bomber kitten and exploded everything. You lost the game! You will be redirected shortly..."
+                    "Oops! It's a Bomber, You lost the game!"
                 );
                 setGameStatus("lose");
                 currentCards = [];
@@ -153,8 +153,14 @@ const CardDeck = () => {
                         );
                     })
                 ) : (
-                    <div className="w-full h-full flex items-start justify-start text-gray-900 text-[200px] halloween-font bg-black">
-                        <div className="min-w-[500px] absolute bottom-[170px] left-[-200px]">
+                    <div className="w-full h-full flex items-start justify-start text-gray-900 text-[200px] bg-black">
+                        <div
+                            className={`min-w-[500px] absolute bottom-[170px] left-[-200px] ${
+                                gameStatus === "win"
+                                    ? "halloween-green-font"
+                                    : "halloween-font"
+                            }`}
+                        >
                             {gameStatus === "win" ? "You won!" : "You lost!"}
                         </div>
                     </div>
