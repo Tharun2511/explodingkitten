@@ -1,16 +1,22 @@
 import React, { useEffect, useState } from "react";
+import { ScaleLoader } from "react-spinners";
 import axios from "axios";
+import { toast } from "react-hot-toast";
 
 const LeaderBoard = () => {
     const SERVER_API = process.env.REACT_APP_SERVER_API;
     const [leaderBoard, setLeaderBoard] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     const fetchLeaderBoard = async () => {
+        setLoading(true);
         try {
             const { data } = await axios.get(`${SERVER_API}/api/leaderboard`);
             setLeaderBoard([...data]);
+            setLoading(false);
         } catch (error) {
-            console.log(error);
+            console.log(error.message);
+            toast.error(error.message);
         }
     };
 
@@ -32,23 +38,29 @@ const LeaderBoard = () => {
                     <div className="w-4/6 text-center">Name</div>
                     <div className="w-1/6 text-center">Wins</div>
                 </div>
-                {leaderBoard.map((user, index) => (
-                    <div
-                        key={user._id}
-                        className="w-full h-full flex justify-around items-center py-2 border-t-[1px] border-red-500"
-                    >
-                        <div className="w-1/6 text-center">{`#${
-                            index + 1
-                        }`}</div>
-                        <div className="w-4/6 text-center">
-                            {user.firstname} {user.lastname}
-                        </div>
-
-                        <div className="w-1/6 text-center">
-                            {user.numberOfWins}
-                        </div>
+                {loading ? (
+                    <div className="w-full h-full mt-24 flex justify-center items-center">
+                        <ScaleLoader color="red" width={6} height={50} radius={5}/>
                     </div>
-                ))}
+                ) : (
+                    leaderBoard.map((user, index) => (
+                        <div
+                            key={user._id}
+                            className="w-full h-full flex justify-around items-center py-2 border-t-[1px] border-red-500"
+                        >
+                            <div className="w-1/6 text-center">{`#${
+                                index + 1
+                            }`}</div>
+                            <div className="w-4/6 text-center">
+                                {user.firstname} {user.lastname}
+                            </div>
+
+                            <div className="w-1/6 text-center">
+                                {user.numberOfWins}
+                            </div>
+                        </div>
+                    ))
+                )}
             </div>
         </div>
     );
