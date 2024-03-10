@@ -33,7 +33,7 @@ const Login = () => {
 
         try {
             setLoading(true);
-            const {data} = await axios.post(`${SERVER_API}/api/user/login`, {
+            const {data} = await axios.post(`https://explodingkitten-xxmd.onrender.com/api/user/login`, {
                 email,
                 password,
             });
