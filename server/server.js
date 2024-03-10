@@ -5,6 +5,14 @@ const miscellaneousRoutes = require("./routes/miscellaneousRoutes");
 const gameRoutes = require("./routes/gameRoutes");
 const dotenv = require("dotenv");
 const app = express();
+const cors = require('cors');
+
+const corsOptions ={
+    origin:'https://explodingkittengame.vercel.app', 
+    credentials:true,            //access-control-allow-credentials:true
+    optionSuccessStatus:200
+}
+app.use(cors(corsOptions));
 
 dotenv.config();
 connectDB();
