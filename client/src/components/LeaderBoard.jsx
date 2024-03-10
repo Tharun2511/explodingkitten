@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 
 const LeaderBoard = () => {
-    const SERVER_API = process.env.SERVER_API;
+    const SERVER_API = process.env.REACT_APP_SERVER_API;
     const [leaderBoard, setLeaderBoard] = useState([]);
 
     const fetchLeaderBoard = async () => {
