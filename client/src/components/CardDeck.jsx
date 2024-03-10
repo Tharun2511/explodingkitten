@@ -9,6 +9,7 @@ import { toast } from "react-hot-toast";
 const CardDeck = () => {
     const SERVER_API = process.env.REACT_APP_SERVER_API;
     const navigate = useNavigate();
+    const loggedUser = useSelector((state) => state.userState.user);
     const game = useSelector((state) => state.gameState.game);
     const cards = useSelector((state) => state.gameState.game.cards);
     const dispatch = useDispatch();
@@ -59,11 +60,14 @@ const CardDeck = () => {
                     "Oops! It's a Bomber kitten and exploded everything. You lost the game! You will be redirected shortly..."
                 );
                 try {
-                    console.log(game.user);
                     await axios.put(`${SERVER_API}/api/game/lose`, {
                         userId: game.user,
                     });
-                    dispatch(updateUser("loss"));
+                    dispatch(updateUser({
+                        ...loggedUser,
+                        prevGameCompleted: true,
+                        numberOfGames: game.numberOfGames + 1,
+                    }));
                 } catch (error) {
                     toast.error("Failed to update status of game to loss");
                 }
