@@ -7,6 +7,7 @@ import { BeatLoader } from "react-spinners";
 import logo from "../assets/logo.png";
 
 const Signup = () => {
+    const SERVER_API = process.env.SERVER_API;
     const navigate = useNavigate();
     let userDetails = {
         firstname: "",
@@ -69,7 +70,10 @@ const Signup = () => {
 
         try {
             setLoading(true);
-            const { data } = await axios.post("/api/user/signup", userDetails);
+            const { data } = await axios.post(
+                `/${SERVER_API}/api/user/signup`,
+                userDetails
+            );
             console.log(data);
             toast.success("Signup Successful");
             localStorage.setItem("user", JSON.stringify(data));
@@ -90,7 +94,7 @@ const Signup = () => {
     return (
         <div className="authBanner w-full h-screen p-3 font-nor flex items-center justify-end">
             <div className="min-w-[500px] h-auto backdrop-blur-3xl text-gray-200 mr-20 p-5 flex flex-col items-center justify-center rounded-2xl">
-                <img src={logo} className="w-[200px] h-[130px]" />
+                <img src={logo} alt="logo" className="w-[200px] h-[130px]" />
                 <form
                     className="flex flex-col justify-center items-center py-3 space-y-4 text-lg"
                     onSubmit={handleSubmit}
