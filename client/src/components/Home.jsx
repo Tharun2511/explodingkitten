@@ -14,6 +14,7 @@ import { setGame } from "../store/game/gameSlice";
 import LeaderBoard from "./LeaderBoard";
 
 const Home = () => {
+    const SERVER_API = process.env.SERVER_API;
     const navigate = useNavigate();
     const dispatch = useDispatch();
     let loggedUser = useSelector((state) => state.userState.user);
@@ -30,12 +31,12 @@ const Home = () => {
         try {
             if (!loggedUser.prevGameCompleted) {
                 console.log("Previous Game executing");
-                await axios.put("/api/game/endprevgame", {
+                await axios.put(`/${SERVER_API}/api/game/endprevgame`, {
                     gameId: loggedUser.prevGame,
                 });
             }
             console.log("Previous Game Ended");
-            const { data } = await axios.post("/api/game/new", {
+            const { data } = await axios.post(`/${SERVER_API}/api/game/new`, {
                 userId: loggedUser._id,
             });
 
@@ -60,7 +61,7 @@ const Home = () => {
     const handleResumeGame = async () => {
         if (!loggedUser.prevGameCompleted) {
             try {
-                const { data } = await axios.post("/api/game/resume", {
+                const { data } = await axios.post(`/${SERVER_API}/api/game/resume`, {
                     gameId: loggedUser.prevGame,
                 });
                 prevGame = {
