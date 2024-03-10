@@ -1,0 +1,103 @@
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Jolly+Lodger&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+    filter: invert(1);
+}
+
+.authBanner{
+    background-image: url('./assets/AuthBanner.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.homeBanner{
+    background-image: url('./assets/HomeBanner.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.font-li{
+    font-family: "Josefin Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 200;
+    font-style: normal;
+}
+
+.font-nor{
+    font-family: "Josefin Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-style: normal;
+}
+
+.font-bol{
+    font-family: "Josefin Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 700;
+    font-style: normal;
+}
+
+.halloween-font{
+        font-family: "Jolly Lodger", system-ui;
+        font-weight: 400;
+        font-style: normal;
+        text-shadow: 1px 1px 20px #fc2323, 1px -1px 20px #fc3838, 1px 1px 20px #ff8585;
+}
+
+.input_field{
+    @apply h-auto bg-transparent px-5 py-2 text-gray-100 placeholder:text-gray-300 border-[1px] outline-none rounded-lg 
+}
+
+select:focus{
+    @apply bg-gray-800
+}
+
+.auth_btn{
+    @apply bg-red-500 hover:bg-red-700 text-gray-200 text-xl font-nor text-center px-5 py-2 rounded-lg cursor-pointer transition-all duration-300 ease-in-out
+}
+
+.btn1{
+    @apply bg-red-500 hover:bg-gray-300 text-gray-200 hover:text-red-500 text-xl font-nor text-center px-5 py-2 rounded-lg cursor-pointer transition-all duration-300 ease-in-out
+}
+
+.btn2{
+    @apply bg-gray-900 hover:bg-gray-300 text-red-500 hover:text-red-500 text-xl font-nor text-center px-5 py-2 rounded-lg cursor-pointer transition-all duration-300 ease-in-out
+}
+
+.card-list {
+    display: flex;
+    padding: 3rem;
+    overflow-x: none;
+}
+
+.card {
+    height: 350px;
+    width: 250px;
+    border-radius: 16px;
+    padding: 15px;
+    box-shadow: -10px 0 30px #252525;
+    transition: .2s;
+    background: yellow;
+}
+
+.card:focus-within~.card, .card:hover~.card {
+    transform: translateX(130px);
+}
+
+.card:hover {
+    transform: translateY(-1rem);
+}
+
+.card:not(:first-child) {
+    margin-left: -130px;
+}
