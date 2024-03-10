@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { updateCards } from "../store/game/gameSlice";
-import {updateUser} from "../store/users/userSlice";
+import { updateUser } from "../store/users/userSlice";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 
@@ -12,7 +12,8 @@ const CardDeck = () => {
     const game = useSelector((state) => state.gameState.game);
     const cards = useSelector((state) => state.gameState.game.cards);
     const dispatch = useDispatch();
-    const [message, setMessage] = useState("Please pick a card");
+    const [message, setMessage] = useState("Good Luck! Let's Play!");
+    const [cardPicked, setCardPicked] = useState("Please pick a card.");
     const [defuseCardCount, setDefuseCardCount] = useState(0);
 
     const handleClickCard = async (cardNumber) => {
@@ -20,6 +21,8 @@ const CardDeck = () => {
         const index = currentCards.findIndex(
             (card) => card.cardNumber === cardNumber
         );
+
+        setCardPicked(cards[index].name);
 
         if (currentCards[index].name === "Cat") {
             currentCards.splice(index, 1);
@@ -33,9 +36,12 @@ const CardDeck = () => {
                 "Cheers! You got a defuser card. Please pick another card."
             );
         } else if (currentCards[index].name === "Shuffle") {
-            const { data } = await axios.post(`${SERVER_API}/api/game/shuffle`, {
-                gameId: game._id,
-            });
+            const { data } = await axios.post(
+                `${SERVER_API}/api/game/shuffle`,
+                {
+                    gameId: game._id,
+                }
+            );
             setMessage(
                 "Oo noo! It's a shuffle card. You got a new set of cards."
             );
@@ -100,10 +106,19 @@ const CardDeck = () => {
 
     return (
         <div className="w-full h-full flex flex-col items-center ">
-            <div className="w-full h-full flex justify-between items-center">
-                <div className="w-1/2 h-full text-xl text-white">{message}</div>
-                <div className="w-1/2 h-full text-xl text-white">
-                    Card picked: {}
+            <div className="w-full h-full flex items-center justify-between text-3xl text-gray-100 halloween-font">
+                <div className="w-1/2 h-full p-3 space-y-3">
+                    <div className="mb-10">
+                        Number of Diffusers: {defuseCardCount}
+                    </div>
+                    <div className="text-black text-[40px]">Message:</div>
+                    <div className="">{message}</div>
+                </div>
+                <div className="w-1/2 h-full text-black">
+                    Card picked:{" "}
+                    <div className="text-[60px] text-gray-200 pt-5">
+                        {cardPicked}
+                    </div>
                 </div>
             </div>
             <div className="card-list">
