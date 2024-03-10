@@ -9,7 +9,6 @@ const cors = require('cors');
 
 const corsOptions ={
     origin:'https://explodingkittengame.vercel.app', 
-    
     optionSuccessStatus:200
 }
 app.use(cors(corsOptions));
