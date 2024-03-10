@@ -16,7 +16,7 @@ const CardDeck = () => {
     const [message, setMessage] = useState("Good Luck! Let's Play!");
     const [cardPicked, setCardPicked] = useState("Please pick a card.");
     const [defuseCardCount, setDefuseCardCount] = useState(0);
-    let gameStatus = "inProgress";
+    const [gameStatus, setGameStatus] = useState("inProgress");
 
     const handleClickCard = async (cardNumber) => {
         let currentCards = [...cards];
@@ -31,24 +31,27 @@ const CardDeck = () => {
             setMessage(
                 "Good going! It's a cat card. Please pick another card."
             );
+            dispatch(updateCards(currentCards));
         } else if (currentCards[index].name === "Defuse") {
             setDefuseCardCount(defuseCardCount + 1);
             currentCards.splice(index, 1);
             setMessage(
                 "Cheers! You got a defuser card. Please pick another card."
             );
+            dispatch(updateCards(currentCards));
         } else if (currentCards[index].name === "Shuffle") {
+            setMessage(
+                "Oo noo! It's a shuffle card. You got a new set of cards."
+            );
             const { data } = await axios.post(
                 `${SERVER_API}/api/game/shuffle`,
                 {
                     gameId: game._id,
                 }
             );
-            setMessage(
-                "Oo noo! It's a shuffle card. You got a new set of cards."
-            );
             currentCards = [...data];
             setDefuseCardCount(0);
+            dispatch(updateCards(currentCards));
         } else {
             if (defuseCardCount > 0) {
                 setDefuseCardCount(defuseCardCount - 1);
@@ -56,12 +59,14 @@ const CardDeck = () => {
                 setMessage(
                     "It's a Bomber kitten. Thankfully! you have a defuser backup. Please pick another card."
                 );
+                dispatch(updateCards(currentCards));
             } else {
                 setMessage(
                     "Oops! It's a Bomber kitten and exploded everything. You lost the game! You will be redirected shortly..."
                 );
-                gameStatus = "loss";
+                setGameStatus("lose");
                 currentCards = [];
+                dispatch(updateCards(currentCards));
                 try {
                     await axios.put(`${SERVER_API}/api/game/lose`, {
                         userId: game.user,
@@ -79,14 +84,13 @@ const CardDeck = () => {
                 setTimeout(() => {
                     navigate("/");
                 }, 5000);
+                return;
             }
         }
 
         if (gameStatus === "inProgress" && currentCards.length === 0) {
-            setMessage(
-                "Hurrah! You won, congrats! You will be redirected shortly..."
-            );
-            gameStatus = "win";
+            setMessage("Hurrah! You won, congrats!");
+            setGameStatus("win");
             try {
                 await axios.put(`${SERVER_API}/api/game/win`, {
                     userId: game.user,
@@ -98,6 +102,7 @@ const CardDeck = () => {
             setTimeout(() => {
                 navigate("/");
             }, 5000);
+            return;
         }
         try {
             await axios.put(`${SERVER_API}/api/game/updatecards`, {
@@ -107,11 +112,9 @@ const CardDeck = () => {
         } catch (error) {
             toast.error("Failed to update cards");
         }
-
-        dispatch(updateCards(currentCards));
     };
 
-    useEffect(() => {}, []);
+    useEffect(() => {}, [cards]);
 
     return (
         <div className="w-full h-full flex flex-col items-center ">
