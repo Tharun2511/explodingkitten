@@ -129,7 +129,7 @@ const Home = () => {
                         {newGameLoading ? (
                             <ClipLoader
                                 size={25}
-                                color="red"
+                                color="black"
                                 className="text-2xl ml-4"
                             />
                         ) : (
