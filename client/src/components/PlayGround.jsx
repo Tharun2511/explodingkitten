@@ -33,8 +33,8 @@ const PlayGround = () => {
                         alt="logo"
                         className="w-5/6 h-[45%] pointer-events-none"
                     />
-                    <div className="h-[40%] backdrop-blur-3xl p-3 space-y-2 text-gray-200 rounded-2xl overflow-scroll">
-                        <h2 className="text-2xl text-red-500">Rules: </h2>
+                    <div className="h-[40%] backdrop-blur-3xl p-3 space-y-2 text-gray-200 shadow-2xl shadow-gray-900 rounded-2xl overflow-scroll">
+                        <h2 className="text-3xl text-gray-900 halloween-font">Rules: </h2>
                         <p>1. Every time player will be dealt 5 cards.</p>
                         <p>2. There are four types of cards.</p>
                         <p>
