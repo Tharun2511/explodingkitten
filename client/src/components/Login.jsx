@@ -8,7 +8,7 @@ import { BeatLoader } from "react-spinners";
 import logo from "../assets/logo.png";
 
 const Login = () => {
-    const SERVER_API = process.env.SERVER_API;
+    const SERVER_API = process.env.REACT_APP_SERVER_API;
     const navigate = useNavigate();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -33,7 +33,7 @@ const Login = () => {
 
         try {
             setLoading(true);
-            const {data} = await axios.post(`https://explodingkitten-xxmd.onrender.com/api/user/login`, {
+            const {data} = await axios.post(`${SERVER_API}/api/user/login`, {
                 email,
                 password,
             });
