@@ -7,7 +7,7 @@ import { BeatLoader } from "react-spinners";
 import logo from "../assets/logo.png";
 
 const Signup = () => {
-    const SERVER_API = process.env.SERVER_API;
+    const SERVER_API = process.env.REACT_APP_SERVER_API;
     const navigate = useNavigate();
     let userDetails = {
         firstname: "",
