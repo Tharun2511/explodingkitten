@@ -24,6 +24,11 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     background-image: url('./assets/HomeBanner.jpg');
     background-repeat: no-repeat;
     background-size: cover;
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    padding: 3vh 1vw;
 }
 
 .font-li{
