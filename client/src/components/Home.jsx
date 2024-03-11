@@ -97,32 +97,32 @@ const Home = () => {
     }, []);
 
     return (
-        <div className="homeBanner w-full h-screen p-3 relative">
-            <div className="flex justify-end m-3">
+        <div className="homeBanner">
+            <div className="h-[7vh] flex justify-end">
                 <div className="auth_btn flex items-center gap-5">
                     <div onClick={handleLogout}>Logout</div>
                     <IoMdLogOut />
                 </div>
             </div>
             <div className="flex justify-center items-center gap-10 py-5">
-                <div className="w-1/3 h-[450px] halloween-font text-9xl text-gray-900 text-center">
+                <div className="w-1/3 h-[80vh] halloween-font text-9xl text-gray-900 text-center">
                     <div className="pointer-events-none">
                         {loggedUser.firstname}
                     </div>
                     <img
                         src={loggedUser.gender === "male" ? male : female}
                         alt="logo"
-                        className="absolute bottom-0 left-1/6 translate-x-1/3 h-[400px] w-[250px] pointer-events-none"
+                        className="absolute bottom-0 left-1/6 translate-x-1/3 h-[450px] w-[270px] pointer-events-none"
                     />
                 </div>
                 <div className="w-1/3 flex flex-col justify-evenly items-center space-y-5">
                     <img
                         src={logo}
                         alt="logo"
-                        className="w-[400px] h-[300px] pointer-events-none"
+                        className="w-[30vw] h-[50vh] pointer-events-none"
                     />
                     <div
-                        className="btn1 w-auto h-14 flex items-center justify-center"
+                        className="btn1 w-auto h-[8vh] flex items-center justify-center"
                         onClick={handleNewGame}
                     >
                         New Game{" "}
@@ -137,7 +137,7 @@ const Home = () => {
                         )}
                     </div>
                     <div
-                        className="btn2 w-auto h-14 flex items-center justify-center"
+                        className="btn2 w-auto h-[8vh] flex items-center justify-center"
                         onClick={handleResumeGame}
                     >
                         Resume Game{" "}
