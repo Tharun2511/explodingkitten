@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { ScaleLoader } from "react-spinners";
 import axios from "axios";
-import { toast } from "react-hot-toast";
+import { toastError } from "../helpers/Helper";
 
 const LeaderBoard = () => {
     const SERVER_API = process.env.REACT_APP_SERVER_API;
@@ -11,11 +11,17 @@ const LeaderBoard = () => {
     const fetchLeaderBoard = async () => {
         setLoading(true);
         try {
-            const { data } = await axios.get(`${SERVER_API}/api/leaderboard`);
+            const { data } = await axios.get(`${SERVER_API}/api/leaderboard`, {
+                headers: {
+                    Authorization: `Bearer ${
+                        JSON.parse(localStorage.getItem("user")).token
+                    }`,
+                },
+            });
             setLeaderBoard([...data]);
             setLoading(false);
         } catch (error) {
-            toast.error(error.message);
+            toastError(error.message);
         }
     };
 

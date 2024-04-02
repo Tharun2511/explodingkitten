@@ -9,10 +9,10 @@ import { useNavigate } from "react-router-dom";
 import male from "../assets/male.png";
 import female from "../assets/female.png";
 import axios from "axios";
-import { toast } from "react-hot-toast";
 import { setGame } from "../store/game/gameSlice";
 import LeaderBoard from "./LeaderBoard";
 import { ClipLoader } from "react-spinners";
+import { toastError } from "../helpers/Helper";
 
 const Home = () => {
     const SERVER_API = process.env.REACT_APP_SERVER_API;
@@ -22,6 +22,12 @@ const Home = () => {
     let prevGame = useSelector((state) => state.gameState.game);
     const [newGameLoading, setNewGameLoading] = useState(false);
     const [resumeGameLoading, setResumeGameLoading] = useState(false);
+    const config = {
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${JSON.parse(localStorage.getItem("user")).token}`,
+        },
+    };
 
     const handleLogout = () => {
         dispatch(userLogout());
@@ -33,13 +39,21 @@ const Home = () => {
         setNewGameLoading(true);
         try {
             if (!loggedUser.prevGameCompleted) {
-                await axios.put(`${SERVER_API}/api/game/lose`, {
-                    userId: loggedUser._id,
-                });
+                await axios.put(
+                    `${SERVER_API}/api/game/lose`,
+                    {
+                        userId: loggedUser._id,
+                    },
+                    config
+                );
             }
-            const { data } = await axios.post(`${SERVER_API}/api/game/new`, {
-                userId: loggedUser._id,
-            });
+            const { data } = await axios.post(
+                `${SERVER_API}/api/game/new`,
+                {
+                    userId: loggedUser._id,
+                },
+                config
+            );
 
             prevGame = {
                 ...data,
@@ -55,7 +69,7 @@ const Home = () => {
             localStorage.setItem("user", JSON.stringify(loggedUser));
             navigate("/playground");
         } catch (error) {
-            toast.error(error.message);
+            toastError(error.message);
         } finally {
             setNewGameLoading(false);
         }
@@ -69,7 +83,8 @@ const Home = () => {
                     `${SERVER_API}/api/game/resume`,
                     {
                         gameId: loggedUser.prevGame,
-                    }
+                    },
+                    config
                 );
                 prevGame = {
                     ...data,
@@ -78,12 +93,12 @@ const Home = () => {
                 navigate("/playground");
             } catch (error) {
                 console.log(error);
-                toast.error("No Previous Game Found");
+                toastError("No Previous Game Found");
             } finally {
                 setResumeGameLoading(false);
             }
         } else {
-            toast.error("No Previous Game Found");
+            toastError("No Previous Game Found");
         }
     };
 

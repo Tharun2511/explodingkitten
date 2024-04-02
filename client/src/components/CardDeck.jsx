@@ -4,7 +4,7 @@ import axios from "axios";
 import { updateCards } from "../store/game/gameSlice";
 import { updateUser } from "../store/users/userSlice";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-hot-toast";
+import { toastError } from "../helpers/Helper";
 
 const CardDeck = () => {
     const SERVER_API = process.env.REACT_APP_SERVER_API;
@@ -17,6 +17,12 @@ const CardDeck = () => {
     const [cardPicked, setCardPicked] = useState("Please pick a card.");
     const [defuseCardCount, setDefuseCardCount] = useState(0);
     const [gameStatus, setGameStatus] = useState("inProgress");
+    const config = {
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${JSON.parse(localStorage.getItem("user")).token}`,
+        },
+    };
 
     const handleClickCard = async (cardNumber) => {
         let currentCards = [...cards];
@@ -47,7 +53,8 @@ const CardDeck = () => {
                 `${SERVER_API}/api/game/shuffle`,
                 {
                     gameId: game._id,
-                }
+                },
+                config
             );
             currentCards = [...data];
             setDefuseCardCount(0);
@@ -61,16 +68,18 @@ const CardDeck = () => {
                 );
                 dispatch(updateCards(currentCards));
             } else {
-                setMessage(
-                    "Oops! It's a Bomber, You lost the game!"
-                );
+                setMessage("Oops! It's a Bomber, You lost the game!");
                 setGameStatus("lose");
                 currentCards = [];
                 dispatch(updateCards(currentCards));
                 try {
-                    await axios.put(`${SERVER_API}/api/game/lose`, {
-                        userId: game.user,
-                    });
+                    await axios.put(
+                        `${SERVER_API}/api/game/lose`,
+                        {
+                            userId: game.user,
+                        },
+                        config
+                    );
                     dispatch(
                         updateUser({
                             ...loggedUser,
@@ -79,7 +88,7 @@ const CardDeck = () => {
                         })
                     );
                 } catch (error) {
-                    toast.error("Failed to update status of game to loss");
+                    toastError("Failed to update status of game to loss");
                 }
                 setTimeout(() => {
                     navigate("/");
@@ -92,12 +101,16 @@ const CardDeck = () => {
             setMessage("Hurrah! You won, congrats!");
             setGameStatus("win");
             try {
-                await axios.put(`${SERVER_API}/api/game/win`, {
-                    userId: game.user,
-                });
+                await axios.put(
+                    `${SERVER_API}/api/game/win`,
+                    {
+                        userId: game.user,
+                    },
+                    config
+                );
                 dispatch(updateUser("win"));
             } catch (error) {
-                toast.error("Failed to status of game to win");
+                toastError("Failed to status of game to win");
             }
             setTimeout(() => {
                 navigate("/");
@@ -105,12 +118,16 @@ const CardDeck = () => {
             return;
         }
         try {
-            await axios.put(`${SERVER_API}/api/game/updatecards`, {
-                gameId: game._id,
-                cards: currentCards,
-            });
+            await axios.put(
+                `${SERVER_API}/api/game/updatecards`,
+                {
+                    gameId: game._id,
+                    cards: currentCards,
+                },
+                config
+            );
         } catch (error) {
-            toast.error("Failed to update cards");
+            toastError("Failed to update cards");
         }
     };
 
